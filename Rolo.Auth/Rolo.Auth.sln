@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rolo.Auth.Api", "Rolo.Auth.Api\Rolo.Auth.Api.csproj", "{DED828B5-9B48-4426-8E95-96E45EE25C2E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rolo.Auth.Core", "Rolo.Auth.Core\Rolo.Auth.Core.csproj", "{68A53F8B-1F31-4514-9ACB-4EE85EFC79A1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Rolo.Auth.Tests", "Rolo.Auth.Tests\Rolo.Auth.Tests.csproj", "{0A201481-EC1D-4FE9-AFBA-0FA571DD0F12}"
+EndProject
 Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DED828B5-9B48-4426-8E95-96E45EE25C2E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DED828B5-9B48-4426-8E95-96E45EE25C2E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DED828B5-9B48-4426-8E95-96E45EE25C2E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DED828B5-9B48-4426-8E95-96E45EE25C2E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{68A53F8B-1F31-4514-9ACB-4EE85EFC79A1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{68A53F8B-1F31-4514-9ACB-4EE85EFC79A1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{68A53F8B-1F31-4514-9ACB-4EE85EFC79A1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{68A53F8B-1F31-4514-9ACB-4EE85EFC79A1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A201481-EC1D-4FE9-AFBA-0FA571DD0F12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A201481-EC1D-4FE9-AFBA-0FA571DD0F12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A201481-EC1D-4FE9-AFBA-0FA571DD0F12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A201481-EC1D-4FE9-AFBA-0FA571DD0F12}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
