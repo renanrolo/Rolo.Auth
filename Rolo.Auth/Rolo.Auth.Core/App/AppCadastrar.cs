@@ -22,14 +22,27 @@ namespace Rolo.Auth.Core.App
             if (!validatedAuthUser.IsValid)
                 return Result<AuthUser>.Error(validatedAuthUser);
 
-            Usuario usuario = new Usuario();
-            usuario.Nome = authUser.Email;
-            contextJwt.Usuario.Add(usuario);
+            using (var transaction = contextJwt.Database.BeginTransaction())
+            {
+                try
+                {
+                    Usuario usuario = new Usuario();
+                    usuario.Nome = authUser.Email;
+                    contextJwt.Usuario.Add(usuario);
 
-            authUser.UsuarioId = usuario.UsuarioId;
+                    authUser.UsuarioId = usuario.UsuarioId;
 
-            contextJwt.AuthUser.Add(authUser);
-            contextJwt.SaveChanges();
+                    contextJwt.AuthUser.Add(authUser);
+                    contextJwt.SaveChanges();
+
+                    transaction.Commit();
+                }
+                catch (System.Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
+            }
 
             return Result<AuthUser>.Sucess(authUser);
         }

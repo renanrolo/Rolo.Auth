@@ -30,7 +30,6 @@ namespace Rolo.Auth.Core.App
             if (!validatedAuthUser.IsValid)
                 return Result<TokenModel>.Error(validatedAuthUser);
 
-
             var userFromDb = contextJwt.AuthUser.SingleOrDefault(x => x.Email == authUser.Email);
 
             if (userFromDb == null)

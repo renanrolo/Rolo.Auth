@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Rolo.Auth.Api.Controllers
@@ -25,9 +26,11 @@ namespace Rolo.Auth.Api.Controllers
         }
 
         // POST api/values
+        [Authorize("Bearer")]
         [HttpPost]
-        public void Post([FromBody] string value)
+        public object Post([FromBody] string value)
         {
+            return "value";
         }
 
         // PUT api/values/5
