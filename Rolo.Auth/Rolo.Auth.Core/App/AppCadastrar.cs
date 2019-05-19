@@ -1,6 +1,7 @@
 ﻿using Rolo.Auth.Core.Data;
 using Rolo.Auth.Core.Entities;
 using Rolo.Auth.Core.Validations;
+using System.Linq;
 
 namespace Rolo.Auth.Core.App
 {
@@ -22,27 +23,20 @@ namespace Rolo.Auth.Core.App
             if (!validatedAuthUser.IsValid)
                 return Result<AuthUser>.Error(validatedAuthUser);
 
-            using (var transaction = contextJwt.Database.BeginTransaction())
+            if (contextJwt.AuthUser.Any(x=>x.Email == authUser.Email))
             {
-                try
-                {
-                    Usuario usuario = new Usuario();
-                    usuario.Nome = authUser.Email;
-                    contextJwt.Usuario.Add(usuario);
-
-                    authUser.UsuarioId = usuario.UsuarioId;
-
-                    contextJwt.AuthUser.Add(authUser);
-                    contextJwt.SaveChanges();
-
-                    transaction.Commit();
-                }
-                catch (System.Exception)
-                {
-                    transaction.Rollback();
-                    throw;
-                }
+                return Result<AuthUser>.Error("Já existe um usuario cadastrado com o E-mail informado");
             }
+
+
+            Usuario usuario = new Usuario();
+            usuario.Nome = authUser.Email;
+            contextJwt.Usuario.Add(usuario);
+
+            authUser.UsuarioId = usuario.UsuarioId;
+
+            contextJwt.AuthUser.Add(authUser);
+            contextJwt.SaveChanges();
 
             return Result<AuthUser>.Sucess(authUser);
         }

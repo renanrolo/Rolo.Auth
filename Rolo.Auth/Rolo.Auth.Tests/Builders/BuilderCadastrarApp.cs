@@ -1,5 +1,8 @@
-﻿using Rolo.Auth.Core.App;
+﻿using System;
+using System.Collections.Generic;
+using Rolo.Auth.Core.App;
 using Rolo.Auth.Core.Data;
+using Rolo.Auth.Core.Entities;
 
 namespace Rolo.Auth.Tests.Builders
 {
@@ -7,9 +10,12 @@ namespace Rolo.Auth.Tests.Builders
     {
         private ContextJwt jwtContext;
 
+        private List<AuthUser> authUsers;
+
+
         private BuilderCadastrarApp()
         {
-
+            authUsers = new List<AuthUser>();
         }
 
         public static BuilderCadastrarApp New()
@@ -26,10 +32,16 @@ namespace Rolo.Auth.Tests.Builders
         {
             if (jwtContext == null)
                 jwtContext = BuilderJwtContext.New()
+                                              .With(authUsers)
                                               .Build();
 
             return new AppCadastrar(jwtContext);
         }
 
+        internal BuilderCadastrarApp With(AuthUser authUser)
+        {
+            authUsers.Add(authUser);
+            return this;
+        }
     }
 }

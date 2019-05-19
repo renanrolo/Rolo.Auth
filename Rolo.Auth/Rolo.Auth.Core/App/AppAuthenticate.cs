@@ -35,7 +35,7 @@ namespace Rolo.Auth.Core.App
             if (userFromDb == null)
                 return Result<TokenModel>.Error("Usuário não localizado.");
 
-            if (userFromDb.Email != authUser.Email || userFromDb.Password != authUser.Password)
+            if (userFromDb.Password != authUser.Password)
                 return Result<TokenModel>.Error("Senha inválida.");
 
             var token = new CreateToken().Create(authUser, signingConfigurations, tokenConfigurations);

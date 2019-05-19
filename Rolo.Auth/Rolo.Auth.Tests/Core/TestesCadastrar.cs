@@ -15,7 +15,7 @@ namespace Rolo.Auth.Tests.Core
         public const string validPassword = "1234";
 
         [TestMethod]
-        public void Testar_cadastrar_usuario_invalid0_vazio()
+        public void Testar_cadastro_invalido_usuario_vazio()
         {
             IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
                                                           .Build();
@@ -34,10 +34,10 @@ namespace Rolo.Auth.Tests.Core
         }
 
         [TestMethod]
-        public void Testar_cadastrar_usuario_invalid0_com_email_vazio()
+        public void Testar_cadastro_invalido_usuario_com_email_vazio()
         {
             IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
-                                                          .Build();
+                                                            .Build();
 
             var user = new AuthUser()
             {
@@ -52,14 +52,19 @@ namespace Rolo.Auth.Tests.Core
         }
 
         [TestMethod]
-        public void Testar_cadastrar_usuario_invalid0_com_email_invalido_versao_um()
+        [DataRow("rolo")]
+        [DataRow("rolo@rolo")]
+        [DataRow("@rolo.com")]
+        [DataRow("@rolo.com")]
+        [DataRow("rolo@.com")]
+        public void Testar_cadastro_invalido_usuario_com_email_em_formato_invalido(string emailInvalido)
         {
             IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
                                                           .Build();
 
             var user = new AuthUser()
             {
-                Email = "rolo",
+                Email = emailInvalido,
                 Password = validPassword
             };
 
@@ -70,25 +75,7 @@ namespace Rolo.Auth.Tests.Core
         }
 
         [TestMethod]
-        public void Testar_cadastrar_usuario_invalid0_com_email_invalido_versao_dois()
-        {
-            IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
-                                                          .Build();
-
-            var user = new AuthUser()
-            {
-                Email = "rolo@rolo",
-                Password = validPassword
-            };
-
-            var newUserResult = cadastrarApp.CadastrarUsuario(user);
-
-            Assert.IsFalse(newUserResult.Status, "Erro no Result");
-            Assert.IsTrue(newUserResult.OnlyMsg("Email inválido."), "Erro em 'Email inválido.'");
-        }
-
-        [TestMethod]
-        public void Testar_cadastrar_usuario_invalido_com_senha_vazia()
+        public void Testar_cadastro_invalido_usuario_com_senha_vazia()
         {
             IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
                                                           .Build();
@@ -106,7 +93,7 @@ namespace Rolo.Auth.Tests.Core
         }
 
         [TestMethod]
-        public void Testar_cadastrar_usuario_invalido_com_senha_pequena()
+        public void Testar_cadastro_invalido_usuario_com_senha_pequena()
         {
             IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
                                                             .Build();
@@ -121,6 +108,25 @@ namespace Rolo.Auth.Tests.Core
 
             Assert.IsFalse(newUserReult.Status, "Erro no Result");
             Assert.IsTrue(newUserReult.OnlyMsg("A senha deve ter mais de '03' caracteres."), "Validação de mensagem única falhou.");
+        }
+
+        [TestMethod]
+        public void Testar_cadastro_invalido_email_em_uso_por_outro_usuario()
+        {
+            IAppCadastrar cadastrarApp = BuilderCadastrarApp.New()
+                                                            .With(new AuthUser() { Email = validEmail })
+                                                            .Build();
+
+            var user = new AuthUser()
+            {
+                Email = validEmail,
+                Password = validPassword
+            };
+
+            var newUserReult = cadastrarApp.CadastrarUsuario(user);
+
+            Assert.IsFalse(newUserReult.Status, "Erro no Result");
+            Assert.IsTrue(newUserReult.OnlyMsg("Já existe um usuario cadastrado com o E-mail informado"), "Validação de mensagem única falhou.");
         }
 
         [TestMethod]
@@ -154,9 +160,6 @@ namespace Rolo.Auth.Tests.Core
             Assert.AreEqual(validEmail, newUsuario.Nome, "Usuario não foi criado com o email informado");
         }
     }
-
-
-
 
 
     public static class CadastrarAppExtendedForTests
