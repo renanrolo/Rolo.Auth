@@ -17,19 +17,19 @@ namespace Rolo.Auth.Core.App
             TokenConfigurations tokenConfigurations)
         {
             ClaimsIdentity identity = new ClaimsIdentity(
-                   new GenericIdentity(usuario.Email, "Login"),
+                   //new GenericIdentity(usuario.Email, "Login"),
                    new[] {
                         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString("N")),
-                        new Claim(JwtRegisteredClaimNames.UniqueName, usuario.Email)
+                        new Claim(JwtRegisteredClaimNames.Email, usuario.Email)
                    }
                );
 
             DateTime dataCriacao = DateTime.Now;
             DateTime dataExpiracao = dataCriacao + TimeSpan.FromSeconds(tokenConfigurations.Seconds);
 
-            var handler = new JwtSecurityTokenHandler();
+            JwtSecurityTokenHandler handler = new JwtSecurityTokenHandler();
 
-            var securityToken = handler.CreateToken(new SecurityTokenDescriptor
+            SecurityTokenDescriptor descriptor = new SecurityTokenDescriptor
             {
                 Issuer = tokenConfigurations.Issuer,
                 Audience = tokenConfigurations.Audience,
@@ -37,10 +37,13 @@ namespace Rolo.Auth.Core.App
                 Subject = identity,
                 NotBefore = dataCriacao,
                 Expires = dataExpiracao
-            });
+            };
 
-            var token = handler.WriteToken(securityToken);
+            //SecurityToken securityToken = handler.CreateToken(descriptor);
+            //string token = handler.WriteToken(securityToken);
 
+            JwtSecurityToken jwtSecurityToken = handler.CreateJwtSecurityToken(descriptor);
+            string token = handler.WriteToken(jwtSecurityToken);
 
             return new TokenModel
             {

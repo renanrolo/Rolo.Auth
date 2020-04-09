@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Rolo.Auth.Api.ViewModels;
 using Rolo.Auth.Core.App;
@@ -14,11 +9,11 @@ namespace Rolo.Auth.Api.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
-        private IAppAuthenticate authenticateApp;
+        private readonly IAppAuthenticate appAuthenticate;
 
-        public LoginController(IAppAuthenticate authenticateApp)
+        public LoginController(IAppAuthenticate appAuthenticate)
         {
-            this.authenticateApp = authenticateApp;
+            this.appAuthenticate = appAuthenticate;
         }
 
 
@@ -29,7 +24,7 @@ namespace Rolo.Auth.Api.Controllers
             if (!ModelState.IsValid)
                 return new { status = false, mensagem = "E-mail e senha são obrigatórios!" };
 
-            return authenticateApp.ValidanteAndCreateToken(new Core.Entities.AuthUser() { Email = usuario.Email, Password = usuario.Senha });
+            return appAuthenticate.ValidanteAndCreateToken(new Core.Entities.AuthUser() { Email = usuario.Email, Password = usuario.Senha });
         }
     }
 }

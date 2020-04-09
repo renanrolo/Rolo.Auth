@@ -1,0 +1,7 @@
+node_modules
+*.log
+*.env
+package-lock.json
+.vs
+bin/
+obj/

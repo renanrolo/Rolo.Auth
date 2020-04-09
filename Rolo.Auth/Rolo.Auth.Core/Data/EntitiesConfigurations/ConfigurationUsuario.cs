@@ -10,6 +10,7 @@ namespace Rolo.Auth.Core.Data.EntitiesConfigurations
         {
             builder.HasKey(x => x.UsuarioId);
             builder.Property(x => x.UsuarioId).ValueGeneratedOnAdd();
+            builder.Property(x => x.Email).IsRequired();
         }
     }
 }

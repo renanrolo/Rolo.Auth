@@ -22,23 +22,22 @@ namespace Rolo.Auth.Api
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddMvc();
 
-          
+            string secretKey = Configuration.GetValue<string>("TokenConfigurations:SecretKey");
+
+            var signingConfigurations = new SigningConfigurations(secretKey);
+            var tokenConfigurations = new TokenConfigurations();
 
             services.AddDbContext<ContextJwt>(options =>
                options.UseSqlServer(Configuration.GetConnectionString("JwtConnection")));
 
-            services.AddScoped<IAppAuthenticate, AppAuthenticate>();
-            services.AddScoped<IAppCadastrar, AppCadastrar>();
-
-            var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
 
-            var tokenConfigurations = new TokenConfigurations();
+            services.AddScoped<IAppAuthenticate, AppAuthenticate>();
+            services.AddScoped<IAppCadastrar, AppCadastrar>();
 
             new ConfigureFromConfigurationOptions<TokenConfigurations>(
                 Configuration.GetSection("TokenConfigurations"))
@@ -82,16 +81,15 @@ namespace Rolo.Auth.Api
             services.AddMvc();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<ContextJwt>();
                 //context.Database.EnsureDeleted();
+                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
-
 
             if (env.IsDevelopment())
             {
@@ -103,21 +101,21 @@ namespace Rolo.Auth.Api
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                //app.UseExceptionHandler("/Home/Error");
             }
 
-            app.UseStaticFiles();
-
+            //app.UseStaticFiles();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
 
-                routes.MapSpaFallbackRoute(
-                    name: "spa-fallback",
-                    defaults: new { controller = "Home", action = "Index" });
+                //routes.MapSpaFallbackRoute(
+                //    name: "spa-fallback",
+                //    defaults: new { controller = "Home", action = "Index" });
             });
+
         }
     }
 }

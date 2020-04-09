@@ -10,7 +10,6 @@ namespace Rolo.Auth.Core.Data.EntitiesConfigurations
         {
             builder.HasKey(x => x.AuthUserId);
             builder.Property(x => x.AuthUserId).ValueGeneratedOnAdd();
-
             builder.Property(x => x.Email).IsRequired();
             builder.Property(x => x.Password).IsRequired(false);
         }

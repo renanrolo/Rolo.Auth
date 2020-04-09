@@ -11,7 +11,6 @@ namespace Rolo.Auth.Core.Data
         {
         }
 
-
         public DbSet<AuthUser> AuthUser { get; set; }
         public DbSet<Usuario> Usuario { get; set; }
 

@@ -6,14 +6,14 @@ using Rolo.Auth.Core.Entities;
 
 namespace Rolo.Auth.Api.Controllers
 {
-    [Route("api/[controller]")]
     //[EnableCors(origins: "*", headers: "*", methods: "*")]
-    public class CadastrarController : Controller
+    [Route("api/[controller]")]
+    public class RegisterController : Controller
     {
         private IAppCadastrar cadastrarApp;
         private IAppAuthenticate authenticateApp;
 
-        public CadastrarController(IAppCadastrar cadastrarApp, IAppAuthenticate authenticateApp)
+        public RegisterController(IAppCadastrar cadastrarApp, IAppAuthenticate authenticateApp)
         {
             this.cadastrarApp = cadastrarApp;
             this.authenticateApp = authenticateApp;
