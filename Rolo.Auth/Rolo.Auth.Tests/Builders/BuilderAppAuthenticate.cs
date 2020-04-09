@@ -21,7 +21,7 @@ namespace Rolo.Auth.Tests.Builders
 
         public IAppAuthenticate Build()
         {
-            SigningConfigurations signingConfigurations = new SigningConfigurations();
+            SigningConfigurations signingConfigurations = new SigningConfigurations("123");
             TokenConfigurations tokenConfigurations = new TokenConfigurations();
 
             ContextJwt contextJwt = BuilderJwtContext.New().With(authUsers).Build();

@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -32,7 +34,7 @@ namespace Rolo.Auth.Api
             var tokenConfigurations = new TokenConfigurations();
 
             services.AddDbContext<ContextJwt>(options =>
-               options.UseSqlServer(Configuration.GetConnectionString("JwtConnection")));
+               options.UseMySql(Configuration.GetConnectionString("JwtConnection")));
 
             services.AddSingleton(signingConfigurations);
 
@@ -87,35 +89,22 @@ namespace Rolo.Auth.Api
             {
                 var context = serviceScope.ServiceProvider.GetRequiredService<ContextJwt>();
                 //context.Database.EnsureDeleted();
-                context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
 
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                //app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                //{
-                //    HotModuleReplacement = true
-                //});
-            }
-            else
-            {
-                //app.UseExceptionHandler("/Home/Error");
             }
 
-            //app.UseStaticFiles();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+            app.UseRouting();
 
-                //routes.MapSpaFallbackRoute(
-                //    name: "spa-fallback",
-                //    defaults: new { controller = "Home", action = "Index" });
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
             });
-
         }
     }
 }
