@@ -23,8 +23,7 @@ namespace Rolo.Auth.Api.Controllers
         [AllowAnonymous]
         public object Post([FromBody]CadastrarViewModel novoLogin)
         {
-            if (!ModelState.IsValid)
-                return new { status = false, mensagem = "E-mail e senha são obrigatórios!" };
+            novoLogin = novoLogin ?? new CadastrarViewModel();
 
             var usuarioLoginCriado = cadastrarApp.CadastrarUsuario(new AuthUser()
             {
@@ -32,10 +31,10 @@ namespace Rolo.Auth.Api.Controllers
                 Password = novoLogin.Senha
             });
 
-            if (usuarioLoginCriado.Status)
-                return authenticateApp.ValidanteAndCreateToken(usuarioLoginCriado.Body);
+            if (!usuarioLoginCriado.Status)
+                return BadRequest(usuarioLoginCriado);
 
-            return usuarioLoginCriado;
+            return authenticateApp.ValidanteAndCreateToken(usuarioLoginCriado.Body);
         }
     }
 }

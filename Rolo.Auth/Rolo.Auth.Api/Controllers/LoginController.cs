@@ -21,10 +21,16 @@ namespace Rolo.Auth.Api.Controllers
         [AllowAnonymous]
         public object Post([FromBody]AuthUserViewModel usuario)
         {
-            if (!ModelState.IsValid)
-                return new { status = false, mensagem = "E-mail e senha são obrigatórios!" };
+            usuario = usuario ?? new AuthUserViewModel();
 
-            return appAuthenticate.ValidanteAndCreateToken(new Core.Entities.AuthUser() { Email = usuario.Email, Password = usuario.Senha });
+            var authUser = new Core.Entities.AuthUser() { Email = usuario.Email, Password = usuario.Senha };
+
+            var response = appAuthenticate.ValidanteAndCreateToken(authUser);
+
+            if (!response.Status )
+                return BadRequest(response);
+
+            return response;
         }
     }
 }

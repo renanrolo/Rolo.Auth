@@ -79,8 +79,31 @@ namespace Rolo.Auth.Api
                     .RequireAuthenticatedUser().Build());
             });
 
-            services.AddCors();
+            //services.AddCors();
             services.AddMvc();
+
+            //services.AddCors(options =>
+            //{
+            //    options.AddDefaultPolicy(
+            //        builder =>
+            //        {
+            //            builder.AllowAnyOrigin()
+            //                   .AllowAnyMethod()
+            //                   .AllowAnyHeader();
+            //        });
+            //});
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAll",
+                    builder =>
+                    {
+                        builder
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                    });
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -91,6 +114,8 @@ namespace Rolo.Auth.Api
                 //context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
             }
+
+            app.UseCors("AllowAll");
 
             if (env.IsDevelopment())
             {
@@ -105,6 +130,9 @@ namespace Rolo.Auth.Api
             {
                 endpoints.MapControllers();
             });
+
+
+
         }
     }
 }
